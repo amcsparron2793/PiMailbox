@@ -194,8 +194,7 @@ def dl_or_not():
         os.chdir(script_dir)
         # if error occurs in setup_mail,
         # return n to dl_or_not() which allows program to move on
-        if emcheck.setup_mail(e=False,
-                              savelocation=savelocation):
+        if emcheck.NewEmailWatcher():
             should_continue = input('error when attempting to check for new reports, '
                                     'would you like to continue? (y/n): ').lower()
             if should_continue == 'y':
