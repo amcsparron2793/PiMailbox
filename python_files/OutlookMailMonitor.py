@@ -1,6 +1,6 @@
 #! python3
 """
-MailMonitor.py
+OutlookMailMonitor.py
 
 Classes/functions to do the heavy lifting of waiting for new mail in AWDGISPlans.
 """
