@@ -2,7 +2,8 @@
 """
 PiMailbox
 
-Monitors AWDGISPlans for new mail. When new mail is received, the pi activates a servo and raises the flag/lights an LED.
+Monitors AWDGISPlans for new mail. When new mail is received,
+the pi activates a servo and raises the flag/lights an LED.
 """
 
 
