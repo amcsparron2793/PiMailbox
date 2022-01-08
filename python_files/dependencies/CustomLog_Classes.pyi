@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 project_root:Path = Path(__file__).parent.parent
-
+log_root:str
 
 def folder_check() -> None:
     ...

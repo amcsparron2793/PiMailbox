@@ -3,18 +3,38 @@
 This module uses the interrogate module to check for docstring coverage in any given project.
 It also outputs a report to /Misc_Project_Files/dev_notes/interrogate_need_docstring.txt
 """
+
+from sys import stderr
+
 try:
     import python_files.dependencies.CustomLog_Classes as Clog
 except ImportError:
     import dependencies.CustomLog_Classes as Clog
 
+try:
+    from python_files.dependencies.yes_no import yes_no_loop as yn
+except ImportError:
+    print("yn could not be imported")
+
+from os import system
 from os.path import join, isdir
 
 try:
     from interrogate import coverage
 except ImportError:
-    print("interrogate.coverage could not be imported, goodbye")
-    exit(1)
+    imp = yn("interrogate.coverage could not be imported.\n Would you like to try to install it with pip?")
+    if imp:
+        try:
+            system("pip install interrogate")
+            from interrogate import coverage
+
+        except ImportError as e:
+            stderr.write("interrogate.coverage could not be imported, goodbye")
+        except Exception as e:
+            stderr.write(str(e))
+    else:
+        stderr.write("interrogate.coverage could not be imported. Goodbye")
+        exit(1)
 
 # globals
 err = Clog.Error()
