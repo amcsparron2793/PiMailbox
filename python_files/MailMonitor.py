@@ -5,6 +5,9 @@ MailMonitor.py
 Classes/functions to do the heavy lifting of waiting for new mail in AWDGISPlans.
 """
 
+# TODO: see if there is a way to monitor without use of the outlook application
+# TODO: if outlook is needed, run mon from here and use arduino for mechanical needs? (usb device)
+
 # imports
 import ctypes  # for the VM_QUIT to stop PumpMessage()
 import threading
@@ -34,6 +37,7 @@ class WatcherThread(threading.Thread):
     def run(self):
         print("Starting up Outlook watcher\n"
               "To terminate the program, press 'Ctrl + C'")
+        # sends all messages from the waiting thread?
         pythoncom.PumpMessages()
 
 

@@ -7,7 +7,8 @@ When new mail is received, the pi activates a servo and raises the flag/lights a
 When the door of the mailbox is opened, the flag goes down, (the Mail is acknowledged)
 """
 
-
+# TODO: see if there is a way to monitor without use of the outlook application
+# TODO: if outlook is needed, run mon from here and use arduino for mechanical needs? (usb device)
 # imports
 from os import system
 from os.path import isdir, isfile
