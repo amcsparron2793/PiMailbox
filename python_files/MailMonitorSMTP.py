@@ -54,11 +54,11 @@ def NewEmailWatcher():
     mail.list()
     # mail.select(mailbox='inbox')
 
-    latest_email_uid = ''
+    latest_email_uid = None
 
     while True:
         mail.select("Inbox", readonly=True)
-        result, data = mail.uid("Search", None, "ALL")  # search and return uids instead
+        result, data = mail.uid("Search", latest_email_uid, "ALL")  # search and return uids instead
         ids = data[0]  # data is a list.
         id_list = ids.split()  # ids is a space separated string
         print("Monitoring email for new messages...")
@@ -68,7 +68,8 @@ def NewEmailWatcher():
             result, data = mail.uid('search', latest_email_uid, "ALL")
                                     #'(RFC822)')  # fetch the email headers and body (RFC822) for the given ID
             raw_email = data[0][1]
-            latest_email_uid == data[0].split()[-1]
+            latest_email_uid = data[0].split()[-1]
             print("New Email Received!! ")
             time.sleep(120)  # put your value here, be sure that this value is sufficient ( see @tripleee comment below)
 
+NewEmailWatcher()
