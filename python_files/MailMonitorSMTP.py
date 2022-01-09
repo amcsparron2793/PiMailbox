@@ -1,3 +1,4 @@
+#! python3
 """
 MailMonitorSMTP.py
 
@@ -62,17 +63,12 @@ def NewEmailWatcher():
     # used a random string to declare olddata
     # and assure that it doesn't initially match any uid
     olddata = "olddata"
+
     print("Monitoring email for new messages...")
     firstrun = True
 
     while True:
         mail.select("Inbox", readonly=True)
-        """try:
-            if data[0].decode("utf-8") == "":
-                latest_email_uid = None
-                #data = [bytes(latest_email_uid, "utf-8")]
-        except NameError:
-            pass"""
 
         # this is set to no filter so that all UIDs will be returned, they're parsed out from there.
         result, data = mail.uid("Search", None, "ALL")  # search and return uids
@@ -93,8 +89,6 @@ def NewEmailWatcher():
         try:
             if (data[0].split()[-1].decode("utf-8") == latest_email_uid
                     or data[0].split()[-1].decode("utf-8") == olddata[0]):
-                # print(latest_email_uid)
-
                 print("no new email")
 
                 firstrun = False
@@ -112,11 +106,6 @@ def NewEmailWatcher():
                 time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
 
         except IndexError as e:
-            """olddata = [bytes(latest_email_uid, "utf-8")]
-            print("data is {}".format(data))
-            print("olddata is {}".format(olddata))
-            latest_email_uid = None
-            print("latest_email_uid is {}".format(latest_email_uid))"""
             firstrun = False
             print("no new email")
             time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
@@ -126,4 +115,4 @@ def NewEmailWatcher():
             firstrun = False
             time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
 
-NewEmailWatcher()
+# NewEmailWatcher()
