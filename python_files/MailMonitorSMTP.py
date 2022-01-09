@@ -1,9 +1,13 @@
+#! python3
 """
 MailMonitorSMTP.py
 
 Connects to AWDGISPlans using SMTP.
 The script then waits for a new message to come in.
-When that happens, the script  prints a message to the screen
+When that happens, the script  prints a message to the screen.
+
+based on https://stackoverflow.com/questions/49086465/python-keep-checking-new-email-and-alert-of-further-new-emails
+
 """
 
 # imports
@@ -13,11 +17,14 @@ import time
 from socket import error
 from sys import stderr
 
+# globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
 
 
+# TODO: needs to be turned into a class, and have its error handling updated
 def mail_login(email_user):
+    """ logs into an IMAP4 email server."""
     email_pass = input('Password: ')
     try:
         mail.login(email_user, email_pass)
@@ -27,6 +34,7 @@ def mail_login(email_user):
 
 
 def NewEmailWatcher():
+    """ Watches an email inbox for new messages. """
     global mail
     global data
     global id_list
@@ -37,9 +45,6 @@ def NewEmailWatcher():
         mail = imaplib.IMAP4_SSL(host='outlook.office365.com', port=993)  # ("imap.gmail.com", 993)
         print(mail.welcome)
     except error:  # socket.error
-        # FIXME: make this log to stderr fileoutput correctly - moving all logging to its own .py file might work best?
-        #  Moving the logging to a new file should just be a matter of repointing stderr to logging.whateverfunction()
-        #  and moving functions to a new .py file?
         print('Connection could not be made due to \'' + str(sys.exc_info()[1]) + '\', please try again later')
         sys.stderr.write(str(sys.exc_info()))
         e = True
@@ -48,28 +53,66 @@ def NewEmailWatcher():
     # set email, ask for password, login and select inbox
     email_user = 'amcsparron@albanyny.gov\\AWDGISPlans'  # raw_input('Email: ')
     print('Account: ' + email_user)
+
     # mail_login is my function
     mail_login(email_user)
-    # these are two attributes of the imported mail module
+
     mail.list()
-    # mail.select(mailbox='inbox')
 
     latest_email_uid = None
+    # used a random string to declare olddata
+    # and assure that it doesn't initially match any uid
+    olddata = "olddata"
+
+    print("Monitoring email for new messages...")
+    firstrun = True
 
     while True:
         mail.select("Inbox", readonly=True)
-        result, data = mail.uid("Search", latest_email_uid, "ALL")  # search and return uids instead
-        ids = data[0]  # data is a list.
-        id_list = ids.split()  # ids is a space separated string
-        print("Monitoring email for new messages...")
-        if data[0].split()[-1] == latest_email_uid:
-            time.sleep(120)  # put your value here, be sure that this value is sufficient ( see @tripleee comment below)
-        else:
-            result, data = mail.uid('search', latest_email_uid, "ALL")
-                                    #'(RFC822)')  # fetch the email headers and body (RFC822) for the given ID
-            raw_email = data[0][1]
-            latest_email_uid = data[0].split()[-1]
-            print("New Email Received!! ")
-            time.sleep(120)  # put your value here, be sure that this value is sufficient ( see @tripleee comment below)
 
-NewEmailWatcher()
+        # this is set to no filter so that all UIDs will be returned, they're parsed out from there.
+        result, data = mail.uid("Search", None, "ALL")  # search and return uids
+
+        print("Running Email Check on {}.\nMost up to date UID before check is {}".format(time.strftime("%x at %X"),
+                                                                                          latest_email_uid))
+
+        # this isn't used so that an index error cant be thrown if data comes back blank.
+        # latest_email_uid = data[0].split()[-1].decode("utf-8")
+
+        # only print the result and raw data if it has changed.
+        if (data[0].decode("utf-8") != ""
+                and data[0].split()[-1].decode("utf-8") != latest_email_uid
+                and not firstrun):
+            print("possible new email detected...")
+            print(result, data, type(data))
+
+        try:
+            if (data[0].split()[-1].decode("utf-8") == latest_email_uid
+                    or data[0].split()[-1].decode("utf-8") == olddata[0]):
+                print("no new email")
+
+                firstrun = False
+                time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+            else:
+                latest_email_uid = data[0].split()[-1].decode("utf-8")
+                if latest_email_uid != olddata[0] and not firstrun:
+                    print("New Email Received!! - uid is {}".format(latest_email_uid))
+                    olddata = [bytes(latest_email_uid, "utf-8")]
+                else:
+                    print("no new email")
+                    pass
+
+                firstrun = False
+                time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+
+        except IndexError as e:
+            firstrun = False
+            print("no new email")
+            time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+            pass
+        except UnboundLocalError as e:
+            print("unbound local error")
+            firstrun = False
+            time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+
+# NewEmailWatcher()

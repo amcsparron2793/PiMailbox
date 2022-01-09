@@ -2,12 +2,12 @@
 """
 OutlookMailMonitor.py
 
-Classes/functions to do the heavy lifting of waiting for new mail in AWDGISPlans.
-"""
+**** this isn't needed for this project anymore but it might be useful for other projects ***
 
-# TODO: see if there is a way to monitor without use of the outlook application
-# TODO: if outlook is needed, and cannot be run on rPi,
-#  run mon from here and use arduino for mechanical needs? (usb device)
+Classes/functions to do the heavy lifting of waiting for new mail in AWDGISPlans.
+
+**** this isn't needed for this project anymore but it might be useful for other projects ***
+"""
 
 # imports
 import ctypes  # for the VM_QUIT to stop PumpMessage()
