@@ -14,6 +14,7 @@ except ImportError:
 try:
     from python_files.dependencies.yes_no import yes_no_loop as yn
 except ImportError:
+    from dependencies.yes_no import yes_no_loop as yn
     print("yn could not be imported")
 
 from os import system
