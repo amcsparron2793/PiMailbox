@@ -59,33 +59,71 @@ def NewEmailWatcher():
     mail.list()
 
     latest_email_uid = None
-
+    # used a random string to declare olddata
+    # and assure that it doesn't initially match any uid
+    olddata = "olddata"
     print("Monitoring email for new messages...")
+    firstrun = True
 
     while True:
         mail.select("Inbox", readonly=True)
+        """try:
+            if data[0].decode("utf-8") == "":
+                latest_email_uid = None
+                #data = [bytes(latest_email_uid, "utf-8")]
+        except NameError:
+            pass"""
 
-        result, data = mail.uid("Search", latest_email_uid, "ALL")  # search and return uids
+        # this is set to no filter so that all UIDs will be returned, they're parsed out from there.
+        result, data = mail.uid("Search", None, "ALL")  # search and return uids
 
-        """ids = data[0]  # data is a list.
-        id_list = ids.split()  # ids is a space separated string"""
+        print("Running Email Check on {}.\nMost up to date UID before check is {}".format(time.strftime("%x at %X"),
+                                                                                          latest_email_uid))
 
-        if data[0].split()[-1].decode("utf-8") == latest_email_uid:
-            print(latest_email_uid)
-            time.sleep(120)  # put your value here, be sure that this value is sufficient ( see @tripleee comment below)
-        else:
-            print(latest_email_uid)
-            result, data = mail.uid('Search', latest_email_uid, "ALL")
-            """
-            "ALL" can be replaced with '(RFC822)')  
-            in order to fetch the email headers and body (RFC822) for the given ID
-            """
+        # this isn't used so that an index error cant be thrown if data comes back blank.
+        # latest_email_uid = data[0].split()[-1].decode("utf-8")
 
-            #raw_email = data[0][1]
+        # only print the result and raw data if it has changed.
+        if (data[0].decode("utf-8") != ""
+                and data[0].split()[-1].decode("utf-8") != latest_email_uid
+                and not firstrun):
+            print("possible new email detected...")
+            print(result, data, type(data))
 
-            latest_email_uid = data[0].split()[-1].decode("utf-8")
-            print("New Email Received!! - uid is {} type is {}".format(latest_email_uid, type(latest_email_uid)))
+        try:
+            if (data[0].split()[-1].decode("utf-8") == latest_email_uid
+                    or data[0].split()[-1].decode("utf-8") == olddata[0]):
+                # print(latest_email_uid)
 
-            time.sleep(120)  # put your value here, be sure that this value is sufficient ( see @tripleee comment below)
+                print("no new email")
+
+                firstrun = False
+                time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+            else:
+                latest_email_uid = data[0].split()[-1].decode("utf-8")
+                if latest_email_uid != olddata[0] and not firstrun:
+                    print("New Email Received!! - uid is {}".format(latest_email_uid))
+                    olddata = [bytes(latest_email_uid, "utf-8")]
+                else:
+                    print("no new email")
+                    pass
+
+                firstrun = False
+                time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+
+        except IndexError as e:
+            """olddata = [bytes(latest_email_uid, "utf-8")]
+            print("data is {}".format(data))
+            print("olddata is {}".format(olddata))
+            latest_email_uid = None
+            print("latest_email_uid is {}".format(latest_email_uid))"""
+            firstrun = False
+            print("no new email")
+            time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+            pass
+        except UnboundLocalError as e:
+            print("unbound local error")
+            firstrun = False
+            time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
 
 NewEmailWatcher()
