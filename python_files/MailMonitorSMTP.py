@@ -17,9 +17,12 @@ import time
 from socket import error
 from sys import stderr
 
+from MechClassesPi import Mechanics
+
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
+mech = Mechanics(25,25,25)  # TODO: put in actual pins
 
 
 # TODO: needs to be turned into a class, and have its error handling updated
@@ -97,6 +100,9 @@ def NewEmailWatcher():
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
+                    # TODO: TEST ME
+                    mech.YouGotMail()
+
                     olddata = [bytes(latest_email_uid, "utf-8")]
                 else:
                     print("no new email")
