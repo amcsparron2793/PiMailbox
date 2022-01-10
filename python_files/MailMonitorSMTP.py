@@ -114,5 +114,5 @@ def NewEmailWatcher():
             print("unbound local error")
             firstrun = False
             time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
-
-# NewEmailWatcher()
+if __name__ == "__main__":
+    NewEmailWatcher()
