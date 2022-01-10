@@ -17,6 +17,11 @@ import time
 from socket import error
 from sys import stderr
 
+import questionary
+# TODO: uncomment this, see below
+# import win32gui
+# import win32con
+
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
@@ -25,7 +30,7 @@ org_stdout = sys.stdout
 # TODO: needs to be turned into a class, and have its error handling updated
 def mail_login(email_user):
     """ logs into an IMAP4 email server."""
-    email_pass = input('Password: ')
+    email_pass = questionary.password('Password: ').ask()
     try:
         mail.login(email_user, email_pass)
     except ConnectionResetError:
@@ -75,6 +80,9 @@ def NewEmailWatcher():
 
         print("Running Email Check on {}.\nMost up to date UID before check is {}".format(time.strftime("%x at %X"),
                                                                                           latest_email_uid))
+        # TODO: add in logging and msgbox, then uncomment this - it minimizes the window
+        """hide = win32gui.GetForegroundWindow()
+        win32gui.ShowWindow(hide, win32con.SW_MINIMIZE)"""
 
         # this isn't used so that an index error cant be thrown if data comes back blank.
         # latest_email_uid = data[0].split()[-1].decode("utf-8")
@@ -114,5 +122,5 @@ def NewEmailWatcher():
             print("unbound local error")
             firstrun = False
             time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
-
-# NewEmailWatcher()
+if __name__ == "__main__":
+    NewEmailWatcher()
