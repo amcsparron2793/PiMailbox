@@ -16,7 +16,12 @@ import sys
 import time
 from socket import error
 from sys import stderr
+
 import questionary
+# TODO: uncomment this, see below
+# import win32gui
+# import win32con
+
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
@@ -75,6 +80,9 @@ def NewEmailWatcher():
 
         print("Running Email Check on {}.\nMost up to date UID before check is {}".format(time.strftime("%x at %X"),
                                                                                           latest_email_uid))
+        # TODO: add in logging and msgbox, then uncomment this - it minimizes the window
+        """hide = win32gui.GetForegroundWindow()
+        win32gui.ShowWindow(hide, win32con.SW_MINIMIZE)"""
 
         # this isn't used so that an index error cant be thrown if data comes back blank.
         # latest_email_uid = data[0].split()[-1].decode("utf-8")
