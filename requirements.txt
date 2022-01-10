@@ -1,5 +1,6 @@
 charset-normalizer==2.0.6
 et-xmlfile==1.1.0
+gTTS==2.2.3
 lxml==4.6.5
 prompt-toolkit==3.0.20
 python-docx==0.8.11
