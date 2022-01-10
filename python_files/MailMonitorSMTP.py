@@ -16,7 +16,7 @@ import sys
 import time
 from socket import error
 from sys import stderr
-
+import questionary
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
@@ -25,7 +25,7 @@ org_stdout = sys.stdout
 # TODO: needs to be turned into a class, and have its error handling updated
 def mail_login(email_user):
     """ logs into an IMAP4 email server."""
-    email_pass = input('Password: ')
+    email_pass = questionary.password('Password: ').ask()
     try:
         mail.login(email_user, email_pass)
     except ConnectionResetError:
