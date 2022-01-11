@@ -18,9 +18,6 @@ from socket import error
 from sys import stderr
 
 import questionary
-# TODO: uncomment this, see below
-# import win32gui
-# import win32con
 
 # globals
 # make a var so that the stdout can be set back to its normal state
@@ -63,7 +60,7 @@ def NewEmailWatcher():
     mail_login(email_user)
 
     mail.list()
-
+    log_file_path = "./MailMonitorLog.log"
     latest_email_uid = None
     # used a random string to declare olddata
     # and assure that it doesn't initially match any uid
@@ -73,6 +70,7 @@ def NewEmailWatcher():
     firstrun = True
 
     while True:
+        #sys.stdout = open(log_file_path, "w")
         mail.select("Inbox", readonly=True)
 
         # this is set to no filter so that all UIDs will be returned, they're parsed out from there.
@@ -80,9 +78,6 @@ def NewEmailWatcher():
 
         print("Running Email Check on {}.\nMost up to date UID before check is {}".format(time.strftime("%x at %X"),
                                                                                           latest_email_uid))
-        # TODO: add in logging and msgbox, then uncomment this - it minimizes the window
-        """hide = win32gui.GetForegroundWindow()
-        win32gui.ShowWindow(hide, win32con.SW_MINIMIZE)"""
 
         # this isn't used so that an index error cant be thrown if data comes back blank.
         # latest_email_uid = data[0].split()[-1].decode("utf-8")
@@ -104,6 +99,7 @@ def NewEmailWatcher():
             else:
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
+                    # TODO: mech on stuff goes here
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
                     olddata = [bytes(latest_email_uid, "utf-8")]
                 else:
@@ -122,5 +118,7 @@ def NewEmailWatcher():
             print("unbound local error")
             firstrun = False
             time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
+
+
 if __name__ == "__main__":
     NewEmailWatcher()
