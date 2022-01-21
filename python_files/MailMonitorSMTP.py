@@ -12,22 +12,30 @@ based on https://stackoverflow.com/questions/49086465/python-keep-checking-new-e
 
 # imports
 import imaplib
-from os import environ
+# best cross platform way to check OS
+from platform import system as p_system
 import sys
 import time
 from socket import error
 from sys import stderr
 
-if "windows" in environ["PWD"].lower():
+# if this is running on a windows system, use questionary, otherwise use getpass.
+# this was changed from an environ["OS"] check for better compatibility with Linux.
+if "windows" in p_system().lower():
     import questionary
 else:
-    import getpass
+    try:
+        import getpass
+    except ImportError:
+        print("getpass could not be imported, defaulting to basic text prompt.")
+        pass
 
 from MechClassesPi import Mechanics
 
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
+
 # instance of the Mechanics class to control servos etc
 Mech = Mechanics(2, 0, 4)
 
@@ -118,7 +126,8 @@ def NewEmailWatcher():
             else:
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
-                    # TODO: mech on stuff goes here
+
+                    # Mech.YouGotMail() turns on the mail led and raises the servo to max.
                     Mech.YouGotMail()
 
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
