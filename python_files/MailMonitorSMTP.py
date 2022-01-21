@@ -18,7 +18,7 @@ import time
 from socket import error
 from sys import stderr
 
-if "windows" in environ["OS"].lower():
+if "windows" in environ["PWD"].lower():
     import questionary
 else:
     import getpass
@@ -119,7 +119,7 @@ def NewEmailWatcher():
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
                     # TODO: mech on stuff goes here
-                    Mech.mail_on()
+                    Mech.YouGotMail()
 
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
                     olddata = [bytes(latest_email_uid, "utf-8")]
