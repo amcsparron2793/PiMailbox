@@ -12,7 +12,8 @@ import gpiozero
 
 class Mechanics:
     def __init__(self, servo_pin, pwr_led_pin, mail_led_pin):
-        # TODO: testing and error handling
+        # TODO: error handling
+        # TODO: docstrings
         self.servo = gpiozero.Servo(servo_pin)
         self.power_led = gpiozero.LED(pwr_led_pin)
         self.mail_led = gpiozero.LED(mail_led_pin)
@@ -25,6 +26,7 @@ class Mechanics:
         """Turns the External PowerLED LED on."""
         self.power_led.on()
         self.pwr_on = True
+        self.servo.min()
         return self.pwr_on
 
     def YouGotMail(self):
