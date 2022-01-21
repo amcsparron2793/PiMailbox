@@ -3,16 +3,20 @@
 
 Error handling Class and methods. """
 
+from platform import system as p_system
 import sys
 from sys import exit
-from os import mkdir, getcwd, environ
+from os import mkdir, getcwd
 from time import strftime
 from os.path import isfile, isdir, join
 from pathlib import Path
 import traceback
 
 # globals
-env_type = environ["WINDIR"]
+if "windows" in p_system().lower():
+    env_type = "windows"
+else:
+    env_type = "linux"
 
 # defines the root project folder using pathlib.Path
 project_root = Path(__file__).parent.parent
