@@ -12,22 +12,41 @@ based on https://stackoverflow.com/questions/49086465/python-keep-checking-new-e
 
 # imports
 import imaplib
+from os import environ
 import sys
 import time
 from socket import error
 from sys import stderr
 
-import questionary
+if "windows" in environ["OS"].lower():
+    import questionary
+else:
+    import getpass
+
+from MechClassesPi import Mechanics
 
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
+# instance of the Mechanics class to control servos etc
+Mech = Mechanics(2, 0, 4)
 
 
 # TODO: needs to be turned into a class, and have its error handling updated
 def mail_login(email_user):
     """ logs into an IMAP4 email server."""
-    email_pass = questionary.password('Password: ').ask()
+    try:
+        if "questionary" in sys.modules:
+            email_pass = questionary.password('Password: ').ask()
+        elif ("questionary" not in sys.modules
+              and "getpass" in sys.modules):
+            email_pass = getpass.unix_getpass()
+        else:
+            email_pass = input("password: ")
+    except Exception as e:
+        print(e.with_traceback(e.__traceback__))
+        exit(1)
+
     try:
         mail.login(email_user, email_pass)
     except ConnectionResetError:
@@ -100,6 +119,8 @@ def NewEmailWatcher():
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
                     # TODO: mech on stuff goes here
+                    Mech.mail_on()
+
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
                     olddata = [bytes(latest_email_uid, "utf-8")]
                 else:
