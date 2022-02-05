@@ -37,7 +37,9 @@ from MechClassesPi import Mechanics
 org_stdout = sys.stdout
 
 # instance of the Mechanics class to control servos etc
-Mech = Mechanics(2, 0, 4)
+Mech = Mechanics(servo_pin=2,
+                 pwr_led_pin=0,
+                 mail_led_pin=4)
 
 
 # TODO: needs to be turned into a class, and have its error handling updated

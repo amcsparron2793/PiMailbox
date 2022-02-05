@@ -31,7 +31,7 @@ class Mechanics:
         self.mail_on = None
 
         self.PowerOn()
-        # TODO: sound v2 with py module instead of system()?
+        # TODO: sound v2 with py module instead of system(vlc)?
         self.mp3_path, self.sound_state = self.mp3Init()
 
     def mp3Init(self):
@@ -59,14 +59,23 @@ class Mechanics:
 
     def YouGotMail(self):
         if self.sound_state:
-            system(f"vlc {self.mp3_path}")
+            # plays youve-got-mail-sound.mp3 and immediately exits vlc
+            try:
+                system(f"vlc --play-and-exit {self.mp3_path}")
+                #system(f"{self.mp3_path}")
+            except Exception as e:
+                print(f"ERROR: {e}")
+                pass
         else:
             pass
+
+        # if the servo is already up, pass, otherwise run self.FlagUp()
         if self.servo_up:
             pass
         else:
             self.FlagUp()
 
+        # if the mail led is already on, pass, otherwise run self.MailOn()
         if self.mail_on:
             pass
         else:
