@@ -1,5 +1,5 @@
 """
-SendArduinoMessage.py
+SendPicoMessage.py
 
 if monitoring needs to be done on my laptop,
 then an Arduino would be more suited
