@@ -44,10 +44,6 @@ class Mechanics:
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher, args=[self.reset_btn])
-        # run the thread
-        # FIXME: when the thread calls self.reset() it causes the mp3 to not play,
-        #  and the buttons don't seem to work. The servo seems to wiggle, and the leds do work
-        self.reset_thread.run()
 
     def mp3Init(self):
         if isfile(self.mp3_path):
@@ -96,6 +92,19 @@ class Mechanics:
         else:
             self.MailOn()
 
+        # run the reset thread that was set up in init
+        # FIXME: when the thread calls self.reset() it causes the mp3 to not play,
+        #  and the buttons don't seem to work. The servo seems to wiggle, and the leds do work
+        # FIXME: when all the second thread does is print and break, it seems to work?
+        if self.reset_thread.isAlive():
+            print("self.reset_thread is alive")
+            pass
+        elif self.reset_thread.is_alive():
+            print("self.reset_thread is alive")
+            pass
+        else:
+            self.reset_thread.run()
+
     def FlagUp(self):
         self.servo.max()
         self.servo_up = True
@@ -140,3 +149,4 @@ class Mechanics:
 while True:
     m = Mechanics(22, 16, 20, 12)
     m.YouGotMail()
+    sleep(5)
