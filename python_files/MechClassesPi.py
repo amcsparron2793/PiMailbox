@@ -96,9 +96,6 @@ class Mechanics:
             self.MailOn()
 
         # run the reset thread that was set up in init
-        # FIXME: when the thread calls self.reset() it causes the mp3 to not play,
-        #  and the buttons don't seem to work. The servo seems to wiggle, and the leds do work
-        # FIXME: when all the second thread does is print and break, it seems to work?
         if self.reset_thread.isAlive():
             print("self.reset_thread is alive")
             pass
@@ -106,7 +103,8 @@ class Mechanics:
             print("self.reset_thread is alive")
             pass
         else:
-            self.reset_thread.run()
+            # self.reset_thread.run()
+            self.reset_thread.start()
 
     def FlagUp(self):
         self.servo.max()
