@@ -26,12 +26,15 @@ class Mechanics:
         self.mp3_path = "../Misc_Project_Files/youve-got-mail-sound.mp3"
         self.mp3_path_backup = "./youve-got-mail-sound.mp3"
         self.mp3_command = None
+        try:
+            self.servo = gpiozero.Servo(servo_pin)
+            self.reset_btn = gpiozero.Button(reset_button_pin)
 
-        self.servo = gpiozero.Servo(servo_pin)
-        self.reset_btn = gpiozero.Button(reset_button_pin)
-
-        self.power_led = gpiozero.LED(pwr_led_pin)
-        self.mail_led = gpiozero.LED(mail_led_pin)
+            self.power_led = gpiozero.LED(pwr_led_pin)
+            self.mail_led = gpiozero.LED(mail_led_pin)
+        except gpiozero.exc.GPIOPinInUse:
+            print("pin in use error")
+            pass
 
         self.servo_up = None
         self.pwr_on = None
