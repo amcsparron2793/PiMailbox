@@ -47,6 +47,7 @@ class Mechanics:
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
+        self.reset_thread.run()
 
     def mp3Init(self):
         if isfile(self.mp3_path):
@@ -99,14 +100,14 @@ class Mechanics:
         # FIXME: when the thread calls self.reset() it causes the mp3 to not play,
         #  and the buttons don't seem to work. The servo seems to wiggle, and the leds do work
         # FIXME: when all the second thread does is print and break, it seems to work?
-        if self.reset_thread.isAlive():
+        """if self.reset_thread.isAlive():
             print("self.reset_thread is alive")
             pass
         elif self.reset_thread.is_alive():
             print("self.reset_thread is alive")
             pass
-        else:
-            self.reset_thread.run()
+        else:"""
+
 
     def FlagUp(self):
         self.servo.max()
@@ -146,10 +147,10 @@ class Mechanics:
                 break
             else:
                 sleep(1)
-        if self.reset_thread.isAlive():
+        """if self.reset_thread.isAlive():
             self.reset_thread.join()
         else:
-            pass
+            pass"""
 
 
 # TODO: remove this when not testing pi
