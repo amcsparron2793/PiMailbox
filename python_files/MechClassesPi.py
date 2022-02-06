@@ -26,12 +26,15 @@ class Mechanics:
         self.mp3_path = "../Misc_Project_Files/youve-got-mail-sound.mp3"
         self.mp3_path_backup = "./youve-got-mail-sound.mp3"
         self.mp3_command = None
+        try:
+            self.servo = gpiozero.Servo(servo_pin)
+            self.reset_btn = gpiozero.Button(reset_button_pin)
 
-        self.servo = gpiozero.Servo(servo_pin)
-        self.reset_btn = gpiozero.Button(reset_button_pin)
-
-        self.power_led = gpiozero.LED(pwr_led_pin)
-        self.mail_led = gpiozero.LED(mail_led_pin)
+            self.power_led = gpiozero.LED(pwr_led_pin)
+            self.mail_led = gpiozero.LED(mail_led_pin)
+        except gpiozero.exc.GPIOPinInUse:
+            print("pin in use error")
+            pass
 
         self.servo_up = None
         self.pwr_on = None
@@ -44,8 +47,6 @@ class Mechanics:
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
-        # run the thread
-        # self.reset_thread.run()
 
     def mp3Init(self):
         if isfile(self.mp3_path):
@@ -71,13 +72,16 @@ class Mechanics:
         return self.pwr_on
 
     def YouGotMail(self):
-        if self.sound_state:
-            # plays youve-got-mail-sound.mp3 and immediately exits vlc
-            try:
-                system(f"vlc --play-and-exit {self.mp3_path}")
-                # system(f"{self.mp3_path}")
-            except Exception as e:
-                print(f"ERROR: {e}")
+        if not self.servo_up:
+            if self.sound_state:
+                # plays youve-got-mail-sound.mp3 and immediately exits vlc
+                try:
+                    system(f"vlc -q --play-and-exit {self.mp3_path}")
+                    # system(f"{self.mp3_path}")
+                except Exception as e:
+                    print(f"ERROR: {e}")
+                    pass
+            else:
                 pass
         else:
             pass
@@ -93,6 +97,16 @@ class Mechanics:
             pass
         else:
             self.MailOn()
+
+        # run the reset thread that was set up in init
+        if not self.reset_thread.isAlive():
+            try:
+                self.reset_thread.start()
+            except RuntimeError:
+                self.reset_thread = threading.Thread(target=self.ResetWatcher)
+                self.reset_thread.start()
+        else:
+            pass
 
     def FlagUp(self):
         self.servo.max()
@@ -128,12 +142,34 @@ class Mechanics:
     def ResetWatcher(self):
         while True:
             if self.reset_btn.is_pressed:
+                print("Resetting...")
                 self.Reset()
+                sleep(5)
+                break
             else:
                 sleep(1)
+        if not self.reset_thread.isAlive():
+            try:
+                self.reset_thread.start()
+            except RuntimeError:
+                self.reset_thread = threading.Thread(target=self.ResetWatcher)
+                # self.reset_thread.start()
+        else:
+            pass
 
 
 # TODO: remove this when not testing pi
+
+m = Mechanics(22, 16, 20, 12)
 while True:
-    m = Mechanics(22, 16, 20, 12)
     m.YouGotMail()
+    sleep(2)
+# FIXME: This calls m.YouGotMail() successfully,
+#  and then waits successfully for a reset button press.
+#  When the reset button is pressed, the pi calls self.Reset() as intended.
+#  ON THE NEXT call to m.YouGotMail, an error:
+#  "Traceback (most recent call last):
+#   File "/usr/lib/python3.7/threading.py", line 864, in run
+#     if self._target:
+#       AttributeError: 'Thread' object has no attribute '_target'"
+#  is thrown.
