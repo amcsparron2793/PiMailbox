@@ -43,8 +43,7 @@ class Mechanics:
         self.mp3_path, self.sound_state = self.mp3Init()
 
         # set up a thread for self.ResetWatcher
-        self.reset_thread = threading.Thread(target=self.ResetWatcher, args=[self.servo, self.reset_btn,
-                                                                             self.power_led, self.mail_led])
+        self.reset_thread = threading.Thread(target=self.ResetWatcher, args=[self.reset_btn])
         # run the thread
         self.reset_thread.run()
 
@@ -126,9 +125,9 @@ class Mechanics:
         else:
             pass
 
-    def ResetWatcher(self):
+    def ResetWatcher(self, btn_obj):
         while True:
-            if self.reset_btn.is_pressed:
+            if btn_obj.is_pressed:
                 self.Reset()
             else:
                 sleep(1)
