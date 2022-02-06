@@ -103,8 +103,8 @@ class Mechanics:
             print("self.reset_thread is alive")
             pass
         else:
-            # self.reset_thread.run()
-            self.reset_thread.start()
+            self.reset_thread.run()
+            #self.reset_thread.start()
 
     def FlagUp(self):
         self.servo.max()
