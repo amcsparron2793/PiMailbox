@@ -45,7 +45,9 @@ class Mechanics:
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher, args=[self.reset_btn])
         # run the thread
-        # self.reset_thread.run()
+        # FIXME: when the thread calls self.reset() it causes the mp3 to not play,
+        #  and the buttons don't seem to work. The servo seems to wiggle, and the leds do work
+        self.reset_thread.run()
 
     def mp3Init(self):
         if isfile(self.mp3_path):
@@ -128,7 +130,8 @@ class Mechanics:
     def ResetWatcher(self, btn_obj):
         while True:
             if btn_obj.is_pressed:
-                self.Reset()
+                print("hello there")
+                break
             else:
                 sleep(1)
 
