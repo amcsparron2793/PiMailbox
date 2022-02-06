@@ -46,7 +46,7 @@ class Mechanics:
         self.mp3_path, self.sound_state = self.mp3Init()
 
         # set up a thread for self.ResetWatcher
-        self.reset_thread = threading.Thread(target=self.ResetWatcher, args=[self.reset_btn])
+        self.reset_thread = threading.Thread(target=self.ResetWatcher)
 
     def mp3Init(self):
         if isfile(self.mp3_path):
@@ -139,9 +139,9 @@ class Mechanics:
         else:
             pass
 
-    def ResetWatcher(self, btn_obj):
+    def ResetWatcher(self):#, btn_obj):
         while True:
-            if btn_obj.is_active:
+            if self.reset_btn.is_active:
                 print("hello there")
                 break
             else:
@@ -153,9 +153,10 @@ class Mechanics:
 
 
 # TODO: remove this when not testing pi
+
+m = Mechanics(22, 16, 20, 12)
 while True:
-    m = Mechanics(22, 16, 20, 12)
     m.YouGotMail()
-    sleep(5)
+    sleep(2)
     m.Reset()
-    sleep(5)
+    sleep(2)
