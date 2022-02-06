@@ -4,6 +4,8 @@ MechClassesPi.py
 
 if I can get the monitor running on the raspberry pi,
 then all the programming for the mechanical side of things would be done here.
+
+as of 2/6/22 default pins are servo = 22, pwr_led = 16, mail_led = 20
 """
 
 # imports
