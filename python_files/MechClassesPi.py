@@ -39,13 +39,13 @@ class Mechanics:
 
         self.PowerOn()
 
+        # TODO: sound v2 with py module instead of system(vlc)?
+        self.mp3_path, self.sound_state = self.mp3Init()
+
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
         # run the thread
         # self.reset_thread.run()
-
-        # TODO: sound v2 with py module instead of system(vlc)?
-        self.mp3_path, self.sound_state = self.mp3Init()
 
     def mp3Init(self):
         if isfile(self.mp3_path):
