@@ -141,7 +141,7 @@ class Mechanics:
 
     def ResetWatcher(self):#, btn_obj):
         while True:
-            if self.reset_btn.is_active:
+            if self.reset_btn.is_pressed:
                 print("hello there")
             else:
                 sleep(1)
