@@ -143,7 +143,10 @@ class Mechanics:
                 break
             else:
                 sleep(1)
-        self.reset_thread.join()
+        if self.reset_thread.isAlive():
+            self.reset_thread.join()
+        else:
+            pass
 
 
 # TODO: remove this when not testing pi
