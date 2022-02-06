@@ -151,3 +151,5 @@ while True:
     m = Mechanics(22, 16, 20, 12)
     m.YouGotMail()
     sleep(5)
+    m.Reset()
+    sleep(5)
