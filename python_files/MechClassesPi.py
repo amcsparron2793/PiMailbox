@@ -143,7 +143,6 @@ class Mechanics:
         while True:
             if self.reset_btn.is_active:
                 print("hello there")
-                break
             else:
                 sleep(1)
         """if self.reset_thread.isAlive():
