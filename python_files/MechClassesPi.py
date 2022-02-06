@@ -138,11 +138,12 @@ class Mechanics:
 
     def ResetWatcher(self, btn_obj):
         while True:
-            if btn_obj.is_pressed:
+            if btn_obj.is_active:
                 print("hello there")
                 break
             else:
                 sleep(1)
+        self.reset_thread.join()
 
 
 # TODO: remove this when not testing pi
