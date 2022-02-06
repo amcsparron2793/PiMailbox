@@ -5,18 +5,22 @@ MechClassesPi.py
 if I can get the monitor running on the raspberry pi,
 then all the programming for the mechanical side of things would be done here.
 
-as of 2/6/22 default pins are servo = 22, pwr_led = 16, mail_led = 20
+as of 2/6/22 10am default pins are servo = 22, pwr_led = 16, mail_led = 20
+as of 2/6/22 11am default for reset_button_pin = 12
+
 """
 
 # imports
 from os import system
 from os.path import isfile
+from time import sleep
 
 import gpiozero
+import threading
 
 
 class Mechanics:
-    def __init__(self, servo_pin, pwr_led_pin, mail_led_pin):
+    def __init__(self, servo_pin, pwr_led_pin, mail_led_pin, reset_button_pin):
         # TODO: error handling
         # TODO: docstrings
         self.mp3_path = "../Misc_Project_Files/youve-got-mail-sound.mp3"
@@ -24,6 +28,7 @@ class Mechanics:
         self.mp3_command = None
 
         self.servo = gpiozero.Servo(servo_pin)
+        self.reset_btn = gpiozero.Button(reset_button_pin)
 
         self.power_led = gpiozero.LED(pwr_led_pin)
         self.mail_led = gpiozero.LED(mail_led_pin)
@@ -33,6 +38,12 @@ class Mechanics:
         self.mail_on = None
 
         self.PowerOn()
+
+        # set up a thread for self.ResetWatcher
+        self.reset_thread = threading.Thread(target=self.ResetWatcher)
+        # run the thread
+        self.reset_thread.run()
+
         # TODO: sound v2 with py module instead of system(vlc)?
         self.mp3_path, self.sound_state = self.mp3Init()
 
@@ -64,7 +75,7 @@ class Mechanics:
             # plays youve-got-mail-sound.mp3 and immediately exits vlc
             try:
                 system(f"vlc --play-and-exit {self.mp3_path}")
-                #system(f"{self.mp3_path}")
+                # system(f"{self.mp3_path}")
             except Exception as e:
                 print(f"ERROR: {e}")
                 pass
@@ -113,3 +124,16 @@ class Mechanics:
             self.FlagDown()
         else:
             pass
+
+    def ResetWatcher(self):
+        while True:
+            if self.reset_btn.is_pressed():
+                self.Reset()
+            else:
+                sleep(1)
+
+
+# TODO: remove this when not testing pi
+while True:
+    m = Mechanics(22, 16, 20, 12)
+    m.YouGotMail()
