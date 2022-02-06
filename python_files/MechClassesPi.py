@@ -137,13 +137,14 @@ class Mechanics:
         else:
             pass
 
-    def ResetWatcher(self):#, btn_obj):
+    def ResetWatcher(self):
         while True:
             if self.reset_btn.is_pressed:
                 print("Resetting...")
                 self.Reset()
                 sleep(5)
                 break
+                # FIXME: this break statement might be an issue?
             else:
                 sleep(1)
         """if self.reset_thread.isAlive():
@@ -158,3 +159,12 @@ m = Mechanics(22, 16, 20, 12)
 while True:
     m.YouGotMail()
     sleep(2)
+# FIXME: This calls m.YouGotMail() successfully,
+#  and then waits successfully for a reset button press.
+#  When the reset button is pressed, the pi calls self.Reset() as intended.
+#  ON THE NEXT call to m.YouGotMail, an error:
+#  "Traceback (most recent call last):
+#   File "/usr/lib/python3.7/threading.py", line 864, in run
+#     if self._target:
+#       AttributeError: 'Thread' object has no attribute '_target'"
+#  is thrown.
