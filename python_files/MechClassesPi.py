@@ -45,7 +45,7 @@ class Mechanics:
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher, args=[self.reset_btn])
         # run the thread
-        self.reset_thread.run()
+        # self.reset_thread.run()
 
     def mp3Init(self):
         if isfile(self.mp3_path):
