@@ -142,7 +142,10 @@ class Mechanics:
     def ResetWatcher(self):#, btn_obj):
         while True:
             if self.reset_btn.is_pressed:
-                print("hello there")
+                print("Resetting...")
+                self.Reset()
+                sleep(5)
+                break
             else:
                 sleep(1)
         """if self.reset_thread.isAlive():
@@ -156,6 +159,4 @@ class Mechanics:
 m = Mechanics(22, 16, 20, 12)
 while True:
     m.YouGotMail()
-    sleep(2)
-    m.Reset()
     sleep(2)
