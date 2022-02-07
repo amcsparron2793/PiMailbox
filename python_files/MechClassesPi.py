@@ -147,10 +147,11 @@ class Mechanics:
                 # FIXME: this break statement might be an issue?
             else:
                 sleep(1)
-        """if self.reset_thread.isAlive():
+        if self.reset_thread.isAlive():
             self.reset_thread.join()
+            self.reset_thread.run()
         else:
-            pass"""
+            pass
 
 
 # TODO: remove this when not testing pi
