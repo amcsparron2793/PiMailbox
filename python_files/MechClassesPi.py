@@ -148,11 +148,14 @@ class Mechanics:
                 #  break is the only reason we get another YouGotMail
             else:
                 sleep(1)
-        """if self.reset_thread.isAlive():
-            self.reset_thread.join()
-            self.reset_thread.run()
+        if not self.reset_thread.isAlive():
+            try:
+                self.reset_thread.start()
+            except RuntimeError:
+                self.reset_thread = threading.Thread(target=self.ResetWatcher)
+                self.reset_thread.start()
         else:
-            pass"""
+            pass
 
 
 # TODO: remove this when not testing pi
