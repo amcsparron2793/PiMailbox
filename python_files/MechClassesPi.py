@@ -96,13 +96,7 @@ class Mechanics:
             self.MailOn()
 
         # run the reset thread that was set up in init
-        if self.reset_thread.isAlive():
-            print("self.reset_thread is alive")
-            pass
-        elif self.reset_thread.is_alive():
-            print("self.reset_thread is alive")
-            pass
-        else:
+        if not self.reset_thread.isAlive():
             self.reset_thread.run()
             #self.reset_thread.start()
 
