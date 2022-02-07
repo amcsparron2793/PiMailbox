@@ -72,13 +72,16 @@ class Mechanics:
         return self.pwr_on
 
     def YouGotMail(self):
-        if self.sound_state:
-            # plays youve-got-mail-sound.mp3 and immediately exits vlc
-            try:
-                system(f"vlc -q --play-and-exit {self.mp3_path}")
-                # system(f"{self.mp3_path}")
-            except Exception as e:
-                print(f"ERROR: {e}")
+        if not self.servo_up:
+            if self.sound_state:
+                # plays youve-got-mail-sound.mp3 and immediately exits vlc
+                try:
+                    system(f"vlc -q --play-and-exit {self.mp3_path}")
+                    # system(f"{self.mp3_path}")
+                except Exception as e:
+                    print(f"ERROR: {e}")
+                    pass
+            else:
                 pass
         else:
             pass
