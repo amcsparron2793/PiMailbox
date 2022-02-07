@@ -143,7 +143,7 @@ class Mechanics:
                 print("Resetting...")
                 self.Reset()
                 sleep(5)
-                continue
+                pass
                 # FIXME: this break statement might be an issue?
             else:
                 sleep(1)
