@@ -162,8 +162,7 @@ class Mechanics:
 
 m = Mechanics(22, 16, 20, 12)
 while True:
-    mthread = threading.Thread(m.YouGotMail())
-    mthread.start()
+    m.YouGotMail()
     sleep(2)
 # FIXME: This calls m.YouGotMail() successfully,
 #  and then waits successfully for a reset button press.
