@@ -159,7 +159,8 @@ class Mechanics:
 
 
 # TODO: remove this when not testing pi
-m = Mechanics(22, 16, 20, 12)
-while True:
-    m.YouGotMail()
-    sleep(2)
+if __name__ == "__main__":
+    m = Mechanics(22, 16, 20, 12)
+    while True:
+        m.YouGotMail()
+        sleep(2)
