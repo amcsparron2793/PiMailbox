@@ -100,8 +100,13 @@ class Mechanics:
 
         # run the reset thread that was set up in init
         if not self.reset_thread.isAlive():
-            self.reset_thread.run()
-            #self.reset_thread.start()
+            try:
+                self.reset_thread.start()
+            except RuntimeError:
+                self.reset_thread = threading.Thread(target=self.ResetWatcher)
+                self.reset_thread.start()
+        else:
+            pass
 
     def FlagUp(self):
         self.servo.max()
@@ -141,8 +146,6 @@ class Mechanics:
                 self.Reset()
                 sleep(5)
                 break
-                # FIXME: this break statement might be an issue?
-                #  break is the only reason we get another YouGotMail
             else:
                 sleep(1)
         if not self.reset_thread.isAlive():
