@@ -153,7 +153,7 @@ class Mechanics:
                 self.reset_thread.start()
             except RuntimeError:
                 self.reset_thread = threading.Thread(target=self.ResetWatcher)
-                self.reset_thread.start()
+                # self.reset_thread.start()
         else:
             pass
 
