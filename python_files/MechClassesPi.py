@@ -159,17 +159,7 @@ class Mechanics:
 
 
 # TODO: remove this when not testing pi
-
 m = Mechanics(22, 16, 20, 12)
 while True:
     m.YouGotMail()
     sleep(2)
-# FIXME: This calls m.YouGotMail() successfully,
-#  and then waits successfully for a reset button press.
-#  When the reset button is pressed, the pi calls self.Reset() as intended.
-#  ON THE NEXT call to m.YouGotMail, an error:
-#  "Traceback (most recent call last):
-#   File "/usr/lib/python3.7/threading.py", line 864, in run
-#     if self._target:
-#       AttributeError: 'Thread' object has no attribute '_target'"
-#  is thrown.
