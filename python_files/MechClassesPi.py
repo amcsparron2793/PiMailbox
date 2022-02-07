@@ -143,7 +143,7 @@ class Mechanics:
                 print("Resetting...")
                 self.Reset()
                 sleep(5)
-                #break
+                break
                 # FIXME: this break statement might be an issue?
                 #  break is the only reason we get another YouGotMail
             else:
@@ -159,7 +159,8 @@ class Mechanics:
 
 m = Mechanics(22, 16, 20, 12)
 while True:
-    m.YouGotMail()
+    mthread = threading.Thread(m.YouGotMail())
+    mthread.start()
     sleep(2)
 # FIXME: This calls m.YouGotMail() successfully,
 #  and then waits successfully for a reset button press.
