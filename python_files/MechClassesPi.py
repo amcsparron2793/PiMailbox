@@ -143,7 +143,7 @@ class Mechanics:
                 print("Resetting...")
                 self.Reset()
                 sleep(5)
-                break
+                #break
                 # FIXME: this break statement might be an issue?
                 #  break is the only reason we get another YouGotMail
             else:
