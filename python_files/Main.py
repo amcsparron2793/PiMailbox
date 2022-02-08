@@ -33,6 +33,7 @@ except ImportError:
     except ImportError:
         raise ImportError("yn could not be imported, rewrite this portion")
 
+from gpiozero import Button
 
 # globals
 if 'dependencies.CustomLog_Classes' in modules:
@@ -49,15 +50,25 @@ doc_check_token_path = "../Misc_Project_Files/no_doc_check"
 
 py_ver_float = float(str(version_info.major) + '.' + str(version_info.minor))
 
+enable_button = Button(25)
+
 
 # functions
+def WaitForEnable():
+    while True:
+        if enable_button.is_pressed:
+            system("python3 MailMonitorSMTP.py")
+        else:
+            time.sleep(0.5)
+
+
 def main_func(dev=False):
     """ Main Program function. """
     if not dev:
+        # TODO wait for enable button
+        WaitForEnable()
         # get start time in seconds since epoch
         start_time = time.time()
-
-        print("Placeholder text")
 
         # calc time since start_time
         calc_runtime(start_time)

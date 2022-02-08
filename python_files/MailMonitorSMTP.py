@@ -30,23 +30,16 @@ else:
         print("getpass could not be imported, defaulting to basic text prompt.")
         pass
 
-from MechClassesPi import WaitForEnable
-
+from MechClassesPi import Mechanics
 # globals
 # make a var so that the stdout can be set back to its normal state
 org_stdout = sys.stdout
 
 # instance of the Mechanics class to control servos etc
-"""Mech = Mechanics(servo_pin=22,
+Mech = Mechanics(servo_pin=22,
                  pwr_led_pin=16,
                  mail_led_pin=20,
-                 reset_button_pin=12)"""
-
-# FIXME: The Current implementation throws:
-#  gpiozero.exc.GPIOPinInUse: pin 22 is already in use by
-#  <gpiozero.PWMOutputDevice object on pin GPIO22, active_high=True, is_active=True>
-W_Enable = WaitForEnable(enable_btn_pin=25, servo_pin=22,
-                         pwr_led_pin=16, mail_led_pin=20, reset_button_pin=12)
+                 reset_button_pin=12)
 
 
 # TODO: needs to be turned into a class, and have its error handling updated
@@ -137,7 +130,7 @@ def NewEmailWatcher():
                 if latest_email_uid != olddata[0] and not firstrun:
 
                     # Mech.YouGotMail() turns on the mail led and raises the servo to max.
-                    W_Enable.YouGotMail()
+                    Mech.YouGotMail()
 
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
                     olddata = [bytes(latest_email_uid, "utf-8")]
