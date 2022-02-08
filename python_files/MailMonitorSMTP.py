@@ -42,6 +42,9 @@ org_stdout = sys.stdout
                  mail_led_pin=20,
                  reset_button_pin=12)"""
 
+# FIXME: The Current implementation throws:
+#  gpiozero.exc.GPIOPinInUse: pin 22 is already in use by
+#  <gpiozero.PWMOutputDevice object on pin GPIO22, active_high=True, is_active=True>
 W_Enable = WaitForEnable(enable_btn_pin=25, servo_pin=22,
                          pwr_led_pin=16, mail_led_pin=20, reset_button_pin=12)
 
