@@ -158,9 +158,19 @@ class Mechanics:
             pass
 
 
+class WaitForEnable(Mechanics):
+    def __init__(self, enable_btn_pin, servo_pin, pwr_led_pin, mail_led_pin, reset_button_pin):
+        self.enable_button = gpiozero.Button(enable_btn_pin)
+        print("Waiting for button press...")
+        while True:
+            if self.enable_button.is_pressed:
+                super().__init__(servo_pin, pwr_led_pin, mail_led_pin, reset_button_pin)
+            else:
+                sleep(1)
 # TODO: remove this when not testing pi
-if __name__ == "__main__":
-    m = Mechanics(22, 16, 20, 12)
+
+"""if __name__ == "__main__":
+#    m = Mechanics(22, 16, 20, 12)
     while True:
         m.YouGotMail()
-        sleep(2)
+        sleep(2)"""
