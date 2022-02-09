@@ -23,10 +23,17 @@ def WaitForEnable():
      Otherwise, the program sleeps for 0.5 seconds."""
 
     while True:
-        if enable_button.is_pressed:
-            system("python3 MailMonitorSMTP.py")
-        else:
-            sleep(0.5)
+        try:
+            if enable_button.is_pressed:
+                system("python3 MailMonitorSMTP.py")
+                break
+            else:
+                sleep(0.5)
+            print("Goodbye!")
+            exit()
+        except KeyboardInterrupt:
+            print("Goodbye!")
+            exit()
 
 
 if __name__ == "__main__":
