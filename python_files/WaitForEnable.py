@@ -30,7 +30,7 @@ def WaitForEnable():
             else:
                 sleep(0.5)
             print("Goodbye!")
-            exit()
+            #exit()
         except KeyboardInterrupt:
             print("Goodbye!")
             exit()
