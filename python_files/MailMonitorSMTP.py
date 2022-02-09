@@ -53,6 +53,9 @@ def mail_login(email_user):
             email_pass = getpass.unix_getpass()
         else:
             email_pass = input("password: ")
+    except KeyboardInterrupt:
+        print("\nGoodbye!!")
+        exit()
     except Exception as e:
         print(e.with_traceback(e.__traceback__))
         exit(1)
