@@ -45,26 +45,40 @@ Mech = Mechanics(servo_pin=22,
 # TODO: needs to be turned into a class, and have its error handling updated
 def mail_login(email_user):
     """ logs into an IMAP4 email server."""
-    try:
-        if "questionary" in sys.modules:
-            email_pass = questionary.password('Password: ').ask()
-        elif ("questionary" not in sys.modules
-              and "getpass" in sys.modules):
-            email_pass = getpass.unix_getpass()
-        else:
-            email_pass = input("password: ")
-    except KeyboardInterrupt:
-        print("\nGoodbye!!")
-        exit()
-    except Exception as e:
-        print(e.with_traceback(e.__traceback__))
-        exit(1)
+    while True:
+        try:
+            if "questionary" in sys.modules:
+                email_pass = questionary.password('Password: ').ask()
+            elif ("questionary" not in sys.modules
+                  and "getpass" in sys.modules):
+                email_pass = getpass.unix_getpass()
+            else:
+                email_pass = input("password: ")
+        except KeyboardInterrupt:
+            print("\nGoodbye!!")
+            exit()
+        except Exception as e:
+            print(e.with_traceback(e.__traceback__))
+            exit(1)
 
-    try:
-        mail.login(email_user, email_pass)
-    except ConnectionResetError:
-        stderr.write(str(sys.exc_info()[1]))
-        print(sys.exc_info()[1])
+        try:
+            mail.login(email_user, email_pass)
+            break
+        except mail.error as e:
+            # if software closes the connection - ie you wait too long before putting your password in.
+            if "10053" in str(e.args[0]):
+                print("{}, Try again".format(e))
+
+            # if login fails due to bad password
+            elif b"LOGIN failed" in e.args[0]:
+                print("{}, Try again".format(e))
+
+            # if login fails due to anything else
+            else:
+                print("{}\nQuitting...".format(e))
+        except ConnectionResetError:
+            stderr.write(str(sys.exc_info()[1]))
+            print(sys.exc_info()[1])
 
 
 def NewEmailWatcher():
