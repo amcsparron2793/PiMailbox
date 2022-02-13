@@ -155,5 +155,5 @@ def NewEmailWatcher():
             time.sleep(120)  # time to sleep between checks 120 secs is the soft minimum
 
 
-if __name__ == "__main__":
-    NewEmailWatcher()
+"""if __name__ == "__main__":
+    NewEmailWatcher()"""
