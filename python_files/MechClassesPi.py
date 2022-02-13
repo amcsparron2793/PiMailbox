@@ -74,7 +74,7 @@ class Mechanics:
         # TODO: sound v2 with py module instead of system(vlc)?
         self.mp3_path, self.sound_state = self.mp3Init()
         # FIXME: take this out when done testing
-        self.sound_state = False
+        # self.sound_state = False
 
         self.lcd = MailBoxLCD()
 
