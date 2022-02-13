@@ -12,7 +12,7 @@ from time import sleep
 from os import system
 
 from gpiozero import Button
-
+import MailMonitorSMTP as mm
 enable_button = Button(25)
 
 
@@ -25,7 +25,8 @@ def WaitForEnable():
     while True:
         try:
             if enable_button.is_pressed:
-                system("python3 MailMonitorSMTP.py")
+                mm.NewEmailWatcher()
+                #system("python3 MailMonitorSMTP.py")
                 break
             else:
                 sleep(0.5)
