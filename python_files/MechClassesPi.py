@@ -17,6 +17,36 @@ from time import sleep
 
 import gpiozero
 import threading
+import Adafruit_CharLCD as LCD
+
+
+class MailBoxLCD:
+    def __init__(self, lcd_columns=16, lcd_rows=2):
+        # Define LCD column and row size for 16x2 LCD.
+        self.lcd_columns = lcd_columns
+        self.lcd_rows = lcd_rows
+
+        # Initialize the LCD using the pins
+        try:
+            self.lcd = LCD.Adafruit_CharLCDBackpack()
+            print("LCD initialized")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def on(self):
+        # Turn backlight on
+        self.lcd.set_backlight(0)
+
+    def clear(self):
+        # Clear the LCD
+        self.lcd.clear()
+
+    def off(self):
+        # Turn the backlight off
+        self.lcd.set_backlight(100)
+
+    def write_message(self, msg_text):
+        self.lcd.message(msg_text)
 
 
 class Mechanics:
@@ -159,6 +189,9 @@ class Mechanics:
 
 if __name__ == "__main__":
     m = Mechanics(22, 16, 20, 12)
+    lcd = MailBoxLCD()
     while True:
         m.YouGotMail()
+        lcd.write_message("You've got mail!")
         sleep(2)
+        lcd.clear()
