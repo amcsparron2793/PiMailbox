@@ -193,7 +193,10 @@ if __name__ == "__main__":
     m = Mechanics(22, 16, 20, 12)
     lcd = MailBoxLCD()
     while True:
+        lcd.on()
         m.YouGotMail()
         lcd.write_message("You've got mail!")
         sleep(2)
         lcd.clear()
+        lcd.off()
+        sleep(2)
