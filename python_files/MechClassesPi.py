@@ -43,6 +43,7 @@ class MailBoxLCD:
 
     def off(self):
         # Turn the backlight off
+        self.lcd.clear()
         self.lcd.set_backlight(100)
 
     def write_message(self, msg_text):
@@ -66,6 +67,7 @@ class Mechanics:
         self.servo_up = None
         self.pwr_on = None
         self.mail_on = None
+        self.lcd_on = None
 
         self.PowerOn()
 
@@ -74,8 +76,17 @@ class Mechanics:
         # FIXME: take this out when done testing
         self.sound_state = False
 
+        self.lcd = MailBoxLCD()
+
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
+
+    def lcdGotMail(self):
+        self.lcd.on()
+        self.lcd.write_message("You've got mail!")
+        has_message = True
+        sleep(2)
+        return has_message
 
     def mp3Init(self):
         if isfile(self.mp3_path):
@@ -120,6 +131,7 @@ class Mechanics:
             pass
         else:
             self.FlagUp()
+            self.lcd_on = self.lcdGotMail()
 
         # if the mail led is already on, pass, otherwise run self.MailOn()
         if self.mail_on:
@@ -168,6 +180,11 @@ class Mechanics:
         else:
             pass
 
+        if self.lcd_on:
+            self.lcd.off()
+        else:
+            pass
+
     def ResetWatcher(self):
         while True:
             if self.reset_btn.is_pressed:
@@ -191,12 +208,6 @@ class Mechanics:
 
 if __name__ == "__main__":
     m = Mechanics(22, 16, 20, 12)
-    lcd = MailBoxLCD()
     while True:
-        lcd.on()
         m.YouGotMail()
-        lcd.write_message("You've got mail!")
-        sleep(2)
-        lcd.clear()
-        lcd.off()
         sleep(2)
