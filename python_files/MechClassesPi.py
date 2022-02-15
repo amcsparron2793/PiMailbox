@@ -17,6 +17,7 @@ from time import sleep
 
 import gpiozero
 import threading
+# noinspection PyUnresolvedReferences
 import Adafruit_CharLCD as LCD
 
 
@@ -76,8 +77,11 @@ class Mechanics:
 
         # TODO: sound v2 with py module instead of system(vlc)?
         self.mp3_path, self.sound_state = self.mp3Init()
-
-        self.lcd = MailBoxLCD()
+        try:
+            self.lcd = MailBoxLCD()
+        except Exception as e:
+            self.FaultOn()
+            print(f"Error: {e}")
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
@@ -123,6 +127,7 @@ class Mechanics:
                     # system(f"{self.mp3_path}")
                     raise Exception("this is a test")
                 except Exception as e:
+                    self.lcd.write_message(e)
                     self.FaultOn()
                     print(f"ERROR: {e}")
                     pass
