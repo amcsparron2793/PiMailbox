@@ -39,7 +39,8 @@ org_stdout = sys.stdout
 Mech = Mechanics(servo_pin=22,
                  pwr_led_pin=16,
                  mail_led_pin=20,
-                 reset_button_pin=12)
+                 reset_button_pin=12,
+                 fault_LED_pin=6)
 
 
 # TODO: needs to be turned into a class, and have its error handling updated

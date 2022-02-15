@@ -51,7 +51,7 @@ class MailBoxLCD:
 
 
 class Mechanics:
-    def __init__(self, servo_pin, pwr_led_pin, mail_led_pin, reset_button_pin):
+    def __init__(self, servo_pin, pwr_led_pin, mail_led_pin, reset_button_pin, fault_LED_pin):
         # TODO: error handling
         # TODO: docstrings
         self.mp3_path = "../Misc_Project_Files/youve-got-mail-sound.mp3"
@@ -63,6 +63,7 @@ class Mechanics:
 
         self.power_led = gpiozero.LED(pwr_led_pin)
         self.mail_led = gpiozero.LED(mail_led_pin)
+        self.fault_led = gpiozero.LED(fault_LED_pin)
 
         self.servo_up = None
         self.pwr_on = None
@@ -108,6 +109,7 @@ class Mechanics:
         self.power_led.on()
         self.pwr_on = True
         self.servo.min()
+        self.fault_led.blink(n=1)
         return self.pwr_on
 
     def YouGotMail(self):
@@ -206,7 +208,7 @@ class Mechanics:
 # TODO: remove this when not testing pi
 
 if __name__ == "__main__":
-    m = Mechanics(22, 16, 20, 12)
+    m = Mechanics(22, 16, 20, 12, 6)
     while True:
         m.YouGotMail()
         sleep(2)
