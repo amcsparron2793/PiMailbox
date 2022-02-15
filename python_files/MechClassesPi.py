@@ -48,17 +48,12 @@ class MailBoxLCD:
         self.lcd.set_backlight(100)
 
     def write_message(self, msg_text):
-        # self.clear calls are to make sure the error
-        # is the only thing displayed on the screen.
         self.clear()
         if len(msg_text) > 16:
-            self.lcd.message(f"{msg_text[0:17]}\n{msg_text[17:]}")
-            self.clear()
-            self.lcd.message(f"{msg_text[0:17]}\n{msg_text[17:]}")
+            self.lcd.message(f"{msg_text[0:17]}\n{msg_text[17:]}\n")
         else:
-            self.lcd.message(msg_text)
-            self.clear()
-            self.lcd.message(msg_text)
+            self.lcd.message(f"{msg_text}\n")
+
 
 class Mechanics:
     def __init__(self, servo_pin, pwr_led_pin,
