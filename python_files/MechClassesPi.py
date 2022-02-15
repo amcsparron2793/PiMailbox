@@ -77,11 +77,11 @@ class Mechanics:
 
         # TODO: sound v2 with py module instead of system(vlc)?
         self.mp3_path, self.sound_state = self.mp3Init()
-        try:
-            self.lcd = MailBoxLCD()
-        except Exception as e:
+        # try:
+        self.lcd = MailBoxLCD()
+        """except Exception as e:
             self.FaultOn()
-            print(f"Error: {e}")
+            print(f"Error: {e}")"""
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
