@@ -82,11 +82,10 @@ def NewEmailWatcher():
         """Server name: outlook.office365.com Port: 993 Encryption method: SSL"""
         mail = imaplib.IMAP4_SSL(host='outlook.office365.com', port=993)  # ("imap.gmail.com", 993)
         print(mail.welcome)
-    except error:  # socket.error
-        Mech.FaultOn()
+    except error as e:  # socket.error
+        Mech.FullErrHandle(e)
         print('Connection could not be made due to \'' + str(sys.exc_info()[1]) + '\', please try again later')
         sys.stderr.write(str(sys.exc_info()))
-        e = True
         return e
 
     # set email, ask for password, login and select inbox
