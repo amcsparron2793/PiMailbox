@@ -77,11 +77,11 @@ class Mechanics:
 
         # TODO: sound v2 with py module instead of system(vlc)?
         self.mp3_path, self.sound_state = self.mp3Init()
-        # try:
-        self.lcd = MailBoxLCD()
-        """except Exception as e:
+        try:
+            self.lcd = MailBoxLCD()
+        except Exception as e:
             self.FaultOn()
-            print(f"Error: {e}")"""
+            print(f"Error: {e}")
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
@@ -125,9 +125,10 @@ class Mechanics:
                 try:
                     system(f"vlc -q --play-and-exit {self.mp3_path}")
                     # system(f"{self.mp3_path}")
+                    # TODO remove me this is just a dummy for testing writing an error to the lcd
                     raise Exception("this is a test")
                 except Exception as e:
-                    self.lcd.write_message(e)
+                    self.lcd.write_message(str(e))
                     self.FaultOn()
                     print(f"ERROR: {e}")
                     pass
