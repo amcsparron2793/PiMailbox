@@ -51,7 +51,8 @@ class MailBoxLCD:
 
 
 class Mechanics:
-    def __init__(self, servo_pin, pwr_led_pin, mail_led_pin, reset_button_pin, fault_LED_pin):
+    def __init__(self, servo_pin, pwr_led_pin,
+                 mail_led_pin, reset_button_pin, fault_LED_pin):
         # TODO: error handling
         # TODO: docstrings
         self.mp3_path = "../Misc_Project_Files/youve-got-mail-sound.mp3"
@@ -68,6 +69,7 @@ class Mechanics:
         self.servo_up = None
         self.pwr_on = None
         self.mail_on = None
+        self.fault_on = None
         self.lcd_on = None
 
         self.PowerOn()
@@ -120,6 +122,7 @@ class Mechanics:
                     system(f"vlc -q --play-and-exit {self.mp3_path}")
                     # system(f"{self.mp3_path}")
                 except Exception as e:
+                    self.fault_led.on()
                     print(f"ERROR: {e}")
                     pass
             else:
@@ -170,6 +173,16 @@ class Mechanics:
         self.mail_on = False
         return self.mail_on
 
+    def FaultOn(self):
+        self.fault_led.blink()
+        self.fault_on = True
+        return self.fault_on
+
+    def FaultOff(self):
+        self.fault_led.off()
+        self.fault_on = False
+        return self.fault_on
+
     def Reset(self):
         if self.mail_on:
             self.MailOff()
@@ -183,6 +196,11 @@ class Mechanics:
 
         if self.lcd_on:
             self.lcd.off()
+        else:
+            pass
+
+        if self.fault_on:
+            self.fault_led.off()
         else:
             pass
 
