@@ -48,7 +48,10 @@ class MailBoxLCD:
         self.lcd.set_backlight(100)
 
     def write_message(self, msg_text):
-        self.lcd.message(msg_text)
+        if len(msg_text) > 16:
+            self.lcd.message(f"{msg_text[0:17]}\n{msg_text[17:]}")
+        else:
+            self.lcd.message(msg_text)
 
 
 class Mechanics:
