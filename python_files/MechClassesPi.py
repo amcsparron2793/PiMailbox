@@ -53,6 +53,14 @@ class MailBoxLCD:
         else:
             self.lcd.message(msg_text)
 
+    def write_error(self, err_text):
+        err_text = ("Error: " + str(err_text))
+        if len(err_text) > 16:
+            self.lcd.message(f"{err_text[0:17]}\n{err_text[17:]}")
+        else:
+            self.lcd.message(err_text)
+        # self.FaultOn()
+
 
 class Mechanics:
     def __init__(self, servo_pin, pwr_led_pin,
@@ -131,7 +139,7 @@ class Mechanics:
                     # TODO remove me this is just a dummy for testing writing an error to the lcd
                     raise Exception("this is a test")
                 except Exception as e:
-                    self.lcd.write_message(("Error: " + str(e.args[0])))
+                    self.lcd.write_error(str(e.args[0]))
                     self.FaultOn()
                     print(f"ERROR: {e}")
                     pass
