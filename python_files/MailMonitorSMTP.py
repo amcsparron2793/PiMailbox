@@ -55,15 +55,18 @@ def mail_login(email_user):
         else:
             email_pass = input("password: ")
     except KeyboardInterrupt:
+        Mech.Reset()
         print("\nGoodbye!!")
         exit()
     except Exception as e:
+        Mech.fault_on()
         print(e.with_traceback(e.__traceback__))
         exit(1)
 
     try:
         mail.login(email_user, email_pass)
     except ConnectionResetError:
+        Mech.FaultOn()
         stderr.write(str(sys.exc_info()[1]))
         print(sys.exc_info()[1])
 
@@ -80,6 +83,7 @@ def NewEmailWatcher():
         mail = imaplib.IMAP4_SSL(host='outlook.office365.com', port=993)  # ("imap.gmail.com", 993)
         print(mail.welcome)
     except error:  # socket.error
+        Mech.FaultOn()
         print('Connection could not be made due to \'' + str(sys.exc_info()[1]) + '\', please try again later')
         sys.stderr.write(str(sys.exc_info()))
         e = True

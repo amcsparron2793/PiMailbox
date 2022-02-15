@@ -33,6 +33,9 @@ def WaitForEnable():
         except KeyboardInterrupt:
             print("Goodbye!")
             exit()
+        except Exception as e:
+            mm.Mech.FaultOn()
+            raise e
 
 
 if __name__ == "__main__":
