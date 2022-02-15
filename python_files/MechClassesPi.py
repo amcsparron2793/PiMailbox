@@ -121,8 +121,9 @@ class Mechanics:
                 try:
                     system(f"vlc -q --play-and-exit {self.mp3_path}")
                     # system(f"{self.mp3_path}")
+                    raise Exception("this is a test")
                 except Exception as e:
-                    self.fault_led.on()
+                    self.FaultOn()
                     print(f"ERROR: {e}")
                     pass
             else:
