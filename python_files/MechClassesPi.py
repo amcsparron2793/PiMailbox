@@ -131,9 +131,11 @@ class Mechanics:
                     # TODO remove me this is just a dummy for testing writing an error to the lcd
                     raise Exception("this is a test")
                 except Exception as e:
+                    self.lcd.clear()
                     self.lcd.write_message(("Error: " + str(e.args[0])))
                     self.FaultOn()
                     print(f"ERROR: {e}")
+                    pass
 
             else:
                 pass
