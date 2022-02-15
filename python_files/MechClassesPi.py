@@ -134,7 +134,7 @@ class Mechanics:
                     self.lcd.write_message(("Error: " + str(e.args[0])))
                     self.FaultOn()
                     print(f"ERROR: {e}")
-                    pass
+
             else:
                 pass
         else:
