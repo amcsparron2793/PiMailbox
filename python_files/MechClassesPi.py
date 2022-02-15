@@ -97,6 +97,11 @@ class Mechanics:
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
 
+    def FullErrHandle(self, err):
+        self.lcd.write_error(str(err.args[0]))
+        self.FaultOn()
+        print(f"ERROR: {err}")
+
     def lcdGotMail(self):
         self.lcd.on()
         # TODO: add in from: xxx
