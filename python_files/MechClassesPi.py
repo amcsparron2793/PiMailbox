@@ -31,6 +31,9 @@ class MailBoxLCD:
         try:
             self.lcd = LCD.Adafruit_CharLCDBackpack()
             print("LCD initialized")
+            self.lcd.message("LCD initialized")
+            sleep(3)
+            self.lcd.clear()
         except Exception as e:
             print(f"Error: {e}")
 
@@ -65,7 +68,6 @@ class MailBoxLCD:
 class Mechanics:
     def __init__(self, servo_pin, pwr_led_pin,
                  mail_led_pin, reset_button_pin, fault_LED_pin):
-        # TODO: error handling
         # TODO: docstrings
         self.mp3_path = "../Misc_Project_Files/youve-got-mail-sound.mp3"
         self.mp3_path_backup = "./youve-got-mail-sound.mp3"
@@ -141,8 +143,6 @@ class Mechanics:
                 try:
                     system(f"vlc -q --play-and-exit {self.mp3_path}")
                     # system(f"{self.mp3_path}")
-                    # TODO remove me this is just a dummy for testing writing an error to the lcd
-                    raise Exception("this is a test")
                 except Exception as e:
                     self.FullErrHandle(e)
                     pass

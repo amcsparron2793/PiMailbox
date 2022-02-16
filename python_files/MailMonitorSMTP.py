@@ -43,7 +43,7 @@ Mech = Mechanics(servo_pin=22,
                  fault_LED_pin=6)
 
 
-# TODO: needs to be turned into a class, and have its error handling updated
+# TODO: needs to be turned into a class
 def mail_login(email_user):
     """ logs into an IMAP4 email server."""
     try:
@@ -51,24 +51,22 @@ def mail_login(email_user):
             email_pass = questionary.password('Password: ').ask()
         elif ("questionary" not in sys.modules
               and "getpass" in sys.modules):
+            # noinspection PyUnresolvedReferences
             email_pass = getpass.unix_getpass()
         else:
             email_pass = input("password: ")
-    except KeyboardInterrupt:
-        Mech.Reset()
+    except KeyboardInterrupt as e:
+        Mech.FullErrHandle(e)
         print("\nGoodbye!!")
         exit()
     except Exception as e:
-        Mech.fault_on()
-        print(e.with_traceback(e.__traceback__))
-        exit(1)
+        Mech.FullErrHandle(e)
 
     try:
         mail.login(email_user, email_pass)
-    except ConnectionResetError:
-        Mech.FaultOn()
-        stderr.write(str(sys.exc_info()[1]))
-        print(sys.exc_info()[1])
+    except ConnectionResetError as e:
+        Mech.FullErrHandle(e)
+        exit(1)
 
 
 def NewEmailWatcher():
@@ -137,6 +135,7 @@ def NewEmailWatcher():
                 if latest_email_uid != olddata[0] and not firstrun:
 
                     # Mech.YouGotMail() turns on the mail led and raises the servo to max.
+                    # TODO: add in param for from field
                     Mech.YouGotMail()
 
                     print("New Email Received!! - uid is {}".format(latest_email_uid))
