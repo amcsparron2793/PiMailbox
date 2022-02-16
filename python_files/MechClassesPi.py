@@ -100,6 +100,7 @@ class Mechanics:
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
 
     def FullErrHandle(self, err):
+        self.lcd.on()
         self.lcd.write_error(str(err.args[0]))
         self.FaultOn()
         print(f"ERROR: {err}")
