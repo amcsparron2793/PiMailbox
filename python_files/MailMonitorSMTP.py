@@ -114,7 +114,7 @@ def NewEmailWatcher():
                                                                                           latest_email_uid))
         # TODO: add in param for from field
         if latest_email_uid is not None:
-            print(mail.fetch(latest_email_uid, '(RFC822)'))
+            print(mail.fetch(latest_email_uid, "ALL"))
 
         # this isn't used so that an index error cant be thrown if data comes back blank.
         # latest_email_uid = data[0].split()[-1].decode("utf-8")
@@ -137,7 +137,7 @@ def NewEmailWatcher():
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
                     # TODO: add in param for from field
-                    print(mail.fetch(latest_email_uid, '(RFC822)'))
+                    print(mail.fetch(latest_email_uid, "ALL"))
                     # Mech.YouGotMail() turns on the mail led and raises the servo to max.
                     Mech.YouGotMail()
 
