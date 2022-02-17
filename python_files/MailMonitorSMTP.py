@@ -139,7 +139,7 @@ def NewEmailWatcher():
                 if latest_email_uid != olddata[0] and not firstrun:
                     # TODO: add in param for from field
                     if latest_email_uid is not None:
-                        print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(Subject)"))
+                        print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(from)"))
                     # Mech.YouGotMail() turns on the mail led and raises the servo to max.
                     Mech.YouGotMail()
 
