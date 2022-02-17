@@ -113,8 +113,9 @@ def NewEmailWatcher():
         print("Running Email Check on {}.\nMost up to date UID before check is {}".format(time.strftime("%x at %X"),
                                                                                           latest_email_uid))
         # TODO: add in param for from field
-        if latest_email_uid is not None:
-            print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(from)"))
+        #if latest_email_uid is not None:
+            # FIXME: imaplib.error: FETCH command error: BAD [b'Command Argument Error. 11']
+            #print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(from)"))
             # "(BODY[HEADER.FIELDS(Subject)"
 
         # this isn't used so that an index error cant be thrown if data comes back blank.
@@ -138,8 +139,9 @@ def NewEmailWatcher():
                 latest_email_uid = data[0].split()[-1].decode("utf-8")
                 if latest_email_uid != olddata[0] and not firstrun:
                     # TODO: add in param for from field
-                    if latest_email_uid is not None:
-                        print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(from)"))
+                    #if latest_email_uid is not None:
+                        # FIXME: imaplib.error: FETCH command error: BAD [b'Command Argument Error. 11']
+                        #print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(from)"))
                     # Mech.YouGotMail() turns on the mail led and raises the servo to max.
                     Mech.YouGotMail()
 
