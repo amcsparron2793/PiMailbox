@@ -114,7 +114,7 @@ def NewEmailWatcher():
                                                                                           latest_email_uid))
         # TODO: add in param for from field
         if latest_email_uid is not None:
-            print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(Subject)"))
+            print(mail.fetch(latest_email_uid, "(BODY[HEADER.FIELDS(from)"))
             # "(BODY[HEADER.FIELDS(Subject)"
 
         # this isn't used so that an index error cant be thrown if data comes back blank.
