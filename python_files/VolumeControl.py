@@ -30,6 +30,8 @@ chan0 = AnalogIn(mcp, MCP.P0)
 print('Raw ADC Value: ', chan0.value)
 print('ADC Voltage: ' + str(chan0.voltage) + 'V')
 
+global last_read
+
 last_read = 0  # this keeps track of the last potentiometer value
 
 # to keep from being jittery we'll only change
