@@ -39,7 +39,7 @@ print('ADC Voltage: ' + str(chan0.voltage) + 'V')
 tolerance = 250
 
 
-# TODO: integrate into MechClassePi.py module
+# TODO: integrate into MechClassPi.py module
 def remap_range(value, left_min, left_max, right_min, right_max):
     """ This remaps a value from original (left) range to new (right) range. """
 
