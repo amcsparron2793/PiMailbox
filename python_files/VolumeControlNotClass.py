@@ -1,7 +1,7 @@
 #! python3
 
 """
-VolumeControl.py
+VolumeControlNotClass.py
 
 sudo pip3 install adafruit-circuitpython-mcp3xxx
 needs to be run for this to work.
@@ -39,7 +39,6 @@ print('ADC Voltage: ' + str(chan0.voltage) + 'V')
 tolerance = 250
 
 
-# TODO: integrate into MechClassPi.py module
 def remap_range(value, left_min, left_max, right_min, right_max):
     """ This remaps a value from original (left) range to new (right) range. """
 
