@@ -92,7 +92,7 @@ class VolumeControl:
                 set_volume = self._remap_range(trim_pot, 0, 65535, 0, 100)
 
                 # set OS volume playback volume
-                print('Volume = {volume}%'.format(volume=set_volume))
+                # print('Volume = {volume}%'.format(volume=set_volume))
                 set_vol_cmd = ('sudo amixer cset numid=1 -- {volume}% > /dev/null'.format(volume=set_volume))
                 system(set_vol_cmd)
 
@@ -251,7 +251,7 @@ class Mechanics:
             self.MailOn()
 
         # run the reset thread that was set up in init
-        if not self.reset_thread.isAlive():
+        if not self.reset_thread.is_alive():
             try:
                 self.reset_thread.start()
             except RuntimeError:
@@ -320,7 +320,7 @@ class Mechanics:
                 break
             else:
                 sleep(1)
-        if not self.reset_thread.isAlive():
+        if not self.reset_thread.is_alive():
             try:
                 self.reset_thread.start()
             except RuntimeError:
