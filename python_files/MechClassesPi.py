@@ -29,7 +29,6 @@ import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
 
 
-# TODO: integrate this into MailMonitor or WaitForEnable
 class VolumeControl:
     """Allows for pot based volume control using an MCP3008 ADC Chip."""
     def __init__(self):
@@ -337,5 +336,3 @@ if __name__ == "__main__":
     while True:
         m.YouGotMail()
         sleep(2)
-"""vol = VolumeControl()
-    vol.WatchVol()"""
