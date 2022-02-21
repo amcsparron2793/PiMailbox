@@ -8,7 +8,7 @@ then all the programming for the mechanical side of things would be done here.
 as of 2/6/22 10am default pins are servo = 22, pwr_led = 16, mail_led = 20
 as of 2/6/22 11am default for reset_button_pin = 12
 as of 2/15/22 default for fault_led_pin = 6
-as of 2/17/22 default pins are servo = 17, pwr_led = 16, mail_led = 20
+as of 2/20/22 default pins are servo = 17, pwr_led = 16, mail_led = 20
 """
 
 # imports
@@ -333,7 +333,7 @@ class Mechanics:
 # TODO: remove this when not testing pi
 
 if __name__ == "__main__":
-    m = Mechanics(22, 16, 20, 12, 6)
+    m = Mechanics(17, 16, 20, 12, 6)
     while True:
         m.YouGotMail()
         sleep(2)
