@@ -39,8 +39,8 @@ class ADCChipInit:
 
             # how much has it changed since the last read?
             pot_adjust = abs(trim_pot - last_read)
-
-            print(pot_adjust)
+            if pot_adjust > self.threshold:
+                print(pot_adjust)
 
 
 if __name__ == "__main__":
