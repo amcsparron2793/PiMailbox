@@ -174,12 +174,15 @@ class Mechanics:
         self.mp3_path, self.sound_state = self.mp3Init()
         try:
             self.lcd = MailBoxLCD()
+            self.vol = VolumeControl()
         except Exception as e:
             self.FaultOn()
             print(f"Error: {e}")
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
+        self.vol_thread = threading.Thread(target=self.vol.WatchVol)
+        self.vol_thread.start()
 
     def FullErrHandle(self, err):
         self.lcd.on()
