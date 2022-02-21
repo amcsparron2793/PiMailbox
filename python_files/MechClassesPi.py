@@ -28,6 +28,7 @@ import board
 import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
 
+
 # TODO: Vol error handling
 class VolumeControl:
     """Allows for pot based volume control using an MCP3008 ADC Chip."""
