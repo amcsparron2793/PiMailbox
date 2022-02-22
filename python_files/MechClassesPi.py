@@ -56,7 +56,6 @@ class VolumeControl:
     @staticmethod
     def _remap_range(value, left_min, left_max, right_min, right_max):
         """ This remaps a value from original (left) range to new (right) range. """
-
         # Figure out how 'wide' each range is
         left_span = left_max - left_min
         right_span = right_max - right_min
@@ -70,7 +69,6 @@ class VolumeControl:
     def WatchVol(self):
         """ Infinite loop to read and change volume
         using a Pot and an ADC (mcp3008)."""
-
         # this keeps track of the last potentiometer value
         last_read = 0
 
@@ -215,11 +213,18 @@ class Mechanics:
             return self.mp3_path, use_sound
 
     def PowerOn(self):
-        """Turns the External PowerLED LED on."""
+        """Turns the External PowerLED LED on, and does a quick test of the LEDs and servo."""
         self.power_led.on()
         self.pwr_on = True
+
+        # makes the servo go up and down once
         self.servo.min()
+        self.servo.max()
+        self.servo.min()
+
+        # makes both leds blink once
         self.fault_led.blink(n=1)
+        self.mail_led.blink(n=1)
         return self.pwr_on
 
     def YouGotMail(self):
