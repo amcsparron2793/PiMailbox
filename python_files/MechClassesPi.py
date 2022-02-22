@@ -8,7 +8,7 @@ then all the programming for the mechanical side of things would be done here.
 as of 2/6/22 10am default pins are servo = 22, pwr_led = 16, mail_led = 20
 as of 2/6/22 11am default for reset_button_pin = 12
 as of 2/15/22 default for fault_led_pin = 6
-as of 2/17/22 default pins are servo = 17, pwr_led = 16, mail_led = 20
+as of 2/20/22 default pins are servo = 17, pwr_led = 16, mail_led = 20
 """
 
 # imports
@@ -18,8 +18,87 @@ from time import sleep
 
 import gpiozero
 import threading
+
+# start of low level i2c/sci modules from adafruit
 # noinspection PyUnresolvedReferences
 import Adafruit_CharLCD as LCD
+import busio
+import digitalio
+import board
+import adafruit_mcp3xxx.mcp3008 as MCP
+from adafruit_mcp3xxx.analog_in import AnalogIn
+
+
+# TODO: Vol error handling
+class VolumeControl:
+    """Allows for pot based volume control using an MCP3008 ADC Chip."""
+    def __init__(self):
+        # These are never used outside the __init__ method,
+        # so they don't need to be self.xxx
+        spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+        # create the cs (chip select) - this is for the ADC chip
+        cs = digitalio.DigitalInOut(board.D22)
+        # create the mcp object - create the chip object itself
+        mcp = MCP.MCP3008(spi, cs)
+
+        # create an analog input channel on pin 0
+        self.chan0 = AnalogIn(mcp, MCP.P0)
+
+        # works great as an init check.
+        print('Raw ADC Value: ', self.chan0.value)
+        print('ADC Voltage: ' + str(self.chan0.voltage) + 'V')
+
+        # to keep from being jittery we'll only change
+        # volume when the pot has moved a significant amount
+        # on a 16-bit ADC
+        self.tolerance = 250
+
+    @staticmethod
+    def _remap_range(value, left_min, left_max, right_min, right_max):
+        """ This remaps a value from original (left) range to new (right) range. """
+        # Figure out how 'wide' each range is
+        left_span = left_max - left_min
+        right_span = right_max - right_min
+
+        # Convert the left range into a 0-1 range (int)
+        value_scaled = int(value - left_min) / int(left_span)
+
+        # Convert the 0-1 range into a value in the right range.
+        return int(right_min + (value_scaled * right_span))
+
+    def WatchVol(self):
+        """ Infinite loop to read and change volume
+        using a Pot and an ADC (mcp3008)."""
+        # this keeps track of the last potentiometer value
+        last_read = 0
+
+        while True:
+            # we'll assume that the pot didn't move
+            trim_pot_changed = False
+
+            # read the analog pin
+            trim_pot = self.chan0.value
+
+            # how much has it changed since the last read?
+            pot_adjust = abs(trim_pot - last_read)
+
+            if pot_adjust > self.tolerance:
+                trim_pot_changed = True
+
+            if trim_pot_changed:
+                # convert 16bit adc0 (0-65535) trim pot read into 0-100 volume level
+                set_volume = self._remap_range(trim_pot, 0, 65535, 0, 100)
+
+                # set OS volume playback volume
+                # print('Volume = {volume}%'.format(volume=set_volume))
+                set_vol_cmd = ('sudo amixer cset numid=1 -- {volume}% > /dev/null'.format(volume=set_volume))
+                system(set_vol_cmd)
+
+                # save the potentiometer reading for the next loop
+                last_read = trim_pot
+
+            # hang out and do nothing for a half second
+            sleep(0.5)
 
 
 class MailBoxLCD:
@@ -93,12 +172,15 @@ class Mechanics:
         self.mp3_path, self.sound_state = self.mp3Init()
         try:
             self.lcd = MailBoxLCD()
+            self.vol = VolumeControl()
         except Exception as e:
             self.FaultOn()
             print(f"Error: {e}")
 
         # set up a thread for self.ResetWatcher
         self.reset_thread = threading.Thread(target=self.ResetWatcher)
+        self.vol_thread = threading.Thread(target=self.vol.WatchVol)
+        self.vol_thread.start()
 
     def FullErrHandle(self, err):
         self.lcd.on()
@@ -131,11 +213,18 @@ class Mechanics:
             return self.mp3_path, use_sound
 
     def PowerOn(self):
-        """Turns the External PowerLED LED on."""
+        """Turns the External PowerLED LED on, and does a quick test of the LEDs and servo."""
         self.power_led.on()
         self.pwr_on = True
+
+        # makes the servo go up and down once
         self.servo.min()
+        self.servo.max()
+        self.servo.min()
+
+        # makes both leds blink once
         self.fault_led.blink(n=1)
+        self.mail_led.blink(n=1)
         return self.pwr_on
 
     def YouGotMail(self):
@@ -167,7 +256,7 @@ class Mechanics:
             self.MailOn()
 
         # run the reset thread that was set up in init
-        if not self.reset_thread.isAlive():
+        if not self.reset_thread.is_alive():
             try:
                 self.reset_thread.start()
             except RuntimeError:
@@ -236,7 +325,7 @@ class Mechanics:
                 break
             else:
                 sleep(1)
-        if not self.reset_thread.isAlive():
+        if not self.reset_thread.is_alive():
             try:
                 self.reset_thread.start()
             except RuntimeError:
@@ -249,7 +338,7 @@ class Mechanics:
 # TODO: remove this when not testing pi
 
 if __name__ == "__main__":
-    m = Mechanics(22, 16, 20, 12, 6)
+    m = Mechanics(17, 16, 20, 12, 6)
     while True:
         m.YouGotMail()
         sleep(2)
