@@ -43,7 +43,7 @@ class ADCChipInit:
         # Convert the 0-1 range into a value in the right range.
         return int(right_min + (value_scaled * right_span))
 
-    def ReadValue(self):
+    def ReadPotValue(self):
         # this keeps track of the last potentiometer value
         last_read = 0
 
@@ -74,4 +74,4 @@ class ADCChipInit:
 
 if __name__ == "__main__":
     adc = ADCChipInit(board.D22)
-    adc.ReadValue()
+    adc.ReadPotValue()
