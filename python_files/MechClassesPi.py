@@ -146,6 +146,9 @@ class MailBoxLCD:
 
 
 class Mechanics:
+    # FIXME: /usr/lib/python3/dist-packages/gpiozero/output_devices.py:1532: PWMSoftwareFallback:
+    #  To reduce servo jitter, use the pigpio pin factory.
+    #  See https://gpiozero.readthedocs.io/en/stable/api_output.html#servo for more info
     def __init__(self, servo_pin, pwr_led_pin,
                  mail_led_pin, reset_button_pin, fault_LED_pin):
         # TODO: docstrings
