@@ -18,10 +18,11 @@ enable_button = Button(25)
 
 # functions
 def WaitForEnable():
-    """ Checks if enable_button was pressed,
-     and calls system("python3 MailMonitorSMTP.py") if it was.
+    """ Checks if enable_button was pressed.
+     When that happens, it runs mm.NewEmailWatcher.
      Otherwise, the program sleeps for 0.5 seconds."""
 
+    print("\n**** Standing By For Enable Button Press ****\n")
     while True:
         try:
             if enable_button.is_pressed:
