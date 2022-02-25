@@ -4,7 +4,7 @@
 WaitForEnable.py
 
 This module initializes the Enable Button and waits for a press.
-When that happens, it calls runs system("python3 MailMonitorSMTP.py").
+When that happens, it runs mm.NewEmailWatcher.
 
 """
 
